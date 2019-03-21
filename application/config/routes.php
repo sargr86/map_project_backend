@@ -76,3 +76,4 @@ $route['comment']='admin/Partners/comment';
 $route['lastet']='admin/Partners/lastet';
 $route['single/(:any)']='admin/Partners/single/$1';
 
+$route['saveDrawing']= 'admin/GPS_Location_Drawing/add_drawing';
