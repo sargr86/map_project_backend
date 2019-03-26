@@ -28,4 +28,38 @@ class Ferry_model extends CI_Model {
 
         return $this->db->get('ferry')->result_array();
     }
+
+    function get_one_ferry($data){
+        if(empty($data)){
+            return false;
+        }
+
+
+        $this -> db -> where('name', $data['name']);
+        $result = $this->db->get('ferry')->result_array();
+        return $result;
+    }
+
+    function update_ferry($data){
+        if(empty($data)){
+            return false;
+        }
+
+        $id = $data->id;
+        unset($data->id);
+
+        $this->db->set($data);
+        $this -> db -> where('id', $id);
+
+        return $this ->db->update('ferry');
+    }
+
+    function remove_ferry($data){
+        if(empty($data)){
+            return false;
+        }
+
+        $this -> db -> where('name', $data->name);
+        return $this ->db->delete('ferry');
+    }
 }

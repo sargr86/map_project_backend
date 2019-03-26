@@ -76,4 +76,7 @@ $route['comment']='admin/Partners/comment';
 $route['lastet']='admin/Partners/lastet';
 $route['single/(:any)']='admin/Partners/single/$1';
 
+$route['removeFerry'] = 'Ferry/remove_ferry';
+$route['updateFerry'] = 'Ferry/update_ferry';
+$route['getOneFerry'] = 'Ferry/get_one_ferry';
 $route['saveDrawing']= 'admin/GPS_Location_Drawing/add_drawing';
