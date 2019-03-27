@@ -247,6 +247,13 @@ Class Tours extends CI_Controller
         echo json_encode($result);
     }
 
+    function get_one_tour_type()
+    {
+        $data = $this->input->get();
+        $result = $this->Tours_model->get_one_tour_type($data);
+        echo json_encode($result);
+    }
+
     public function remove_tour(){
         $request_body = file_get_contents('php://input');
 
@@ -259,6 +266,17 @@ Class Tours extends CI_Controller
         } else {
             $result = $this->Tours_model->get_tours_and_type();
         }
+        echo json_encode($result);
+    }
+
+    function update_tour_type()
+    {
+        $request_body = file_get_contents('php://input');
+
+        $req = json_decode($request_body);
+
+        $result = $this->Tours_model->update_tour_type($req);
+
         echo json_encode($result);
     }
 

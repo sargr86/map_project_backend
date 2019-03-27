@@ -67,13 +67,25 @@ class Tours_model extends CI_Model
         return $this->db->get('tours_type')->result_array();
     }
 
-    function get_one_tour($data){
-        if(empty($data)){
+
+    function get_one_tour_type($data)
+    {
+        if (empty($data)) {
             return false;
         }
 
+        $this->db->where('tour_name', $data['name']);
+        $result = $this->db->get('tours_type')->result_array();
+        return $result;
+    }
 
-        $this -> db -> where('name', $data['name']);
+    function get_one_tour($data)
+    {
+        if (empty($data)) {
+            return false;
+        }
+
+        $this->db->where('name', $data['name']);
         $result = $this->db->get('tours')->result_array();
         return $result;
     }
@@ -88,8 +100,9 @@ class Tours_model extends CI_Model
         return $this->db->delete('tours');
     }
 
-    function update_tour($data){
-        if(empty($data)){
+    function update_tour($data)
+    {
+        if (empty($data)) {
             return false;
         }
 
@@ -97,8 +110,26 @@ class Tours_model extends CI_Model
         unset($data->id);
 
         $this->db->set($data);
-        $this -> db -> where('id', $id);
+        $this->db->where('id', $id);
 
-        return $this ->db->update('tours');
+        return $this->db->update('tours');
+    }
+
+    function update_tour_type($data)
+    {
+        if (empty($data)) {
+            return false;
+        }
+
+        $id = $data->id;
+        unset($data->id);
+        unset($data->mixinf);
+        $data->tour_name = $data->name;
+        unset($data->name);
+
+        $this->db->set($data);
+        $this->db->where('id', $id);
+
+        return $this->db->update('tours_type');
     }
 }
