@@ -52,31 +52,40 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'home';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
-$route['check_price']='price_page/price_page';
+$route['check_price'] = 'price_page/price_page';
 
-$route['forgot_password']='user/forgot_password';
-$route['dashboard']='dashboard/dashboard/';
+$route['forgot_password'] = 'user/forgot_password';
+$route['dashboard'] = 'dashboard/dashboard/';
 
-$route['admin_login']  = 'admin/admin/login';
-$route['addTours']     = 'admin/Tours/add_tours';
-$route['allTours']     = 'admin/Tours/get_tour';
-$route['addTourType']  = 'admin/Tours/add_tour_type';
-$route['allTourType']  = 'admin/Tours/get_tour_type';
+$route['admin_login'] = 'admin/admin/login';
+
+$route['addTours'] = 'admin/Tours/add_tours';
+$route['allTours'] = 'admin/Tours/get_tour';
+$route['removeTour'] = 'admin/Tours/remove_tour';
+$route['updateTour'] = 'admin/Tours/update_tour';
+$route['getOneTour'] = 'admin/Tours/get_one_tour';
+
+$route['addTourType'] = 'admin/Tours/add_tour_type';
+$route['allTourType'] = 'admin/Tours/get_tour_type';
+
 $route['insert_ferry'] = 'Ferry/insert_ferry';
-$route['all_ferry']    = 'Ferry/get_all_ferry';
-$route['addPartner']    = 'admin/Partners/add_partner';
-$route['allPartner']    = 'admin/Partners/get_partners';
-$route['checkPartner']    = 'admin/Partners/partner_login';
-$route['addFoodDrink']    = 'admin/FoodDrink/add_food_drink';
-$route['login']    = 'admin/Partners/login';
-$route['registration']='admin/Partners/registration';
-$route['home']='admin/Partners/home';
-$route['add_comment']='admin/Partners/add_comment';
-$route['comment']='admin/Partners/comment';
-$route['lastet']='admin/Partners/lastet';
-$route['single/(:any)']='admin/Partners/single/$1';
+$route['all_ferry'] = 'Ferry/get_all_ferry';
+
+$route['addPartner'] = 'admin/Partners/add_partner';
+$route['allPartner'] = 'admin/Partners/get_partners';
+$route['checkPartner'] = 'admin/Partners/partner_login';
+
+$route['addFoodDrink'] = 'admin/FoodDrink/add_food_drink';
+$route['login'] = 'admin/Partners/login';
+$route['registration'] = 'admin/Partners/registration';
+$route['home'] = 'admin/Partners/home';
+$route['add_comment'] = 'admin/Partners/add_comment';
+$route['comment'] = 'admin/Partners/comment';
+$route['lastet'] = 'admin/Partners/lastet';
+$route['single/(:any)'] = 'admin/Partners/single/$1';
 
 $route['removeFerry'] = 'Ferry/remove_ferry';
 $route['updateFerry'] = 'Ferry/update_ferry';
 $route['getOneFerry'] = 'Ferry/get_one_ferry';
-$route['saveDrawing']= 'admin/GPS_Location_Drawing/add_drawing';
+
+$route['saveDrawing'] = 'admin/GPS_Location_Drawing/add_drawing';

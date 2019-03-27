@@ -239,4 +239,37 @@ Class Tours extends CI_Controller
 
         return $pass;
     }
+
+    function get_one_tour()
+    {
+        $data = $this->input->get();
+        $result = $this->Tours_model->get_one_tour($data);
+        echo json_encode($result);
+    }
+
+    public function remove_tour(){
+        $request_body = file_get_contents('php://input');
+
+        $req = json_decode($request_body);
+
+        $result = $this->Tours_model->remove_tour($req);
+        if (!$result) {
+            $response['message'] = 'Data not removed please try again.';
+            $response['status'] = '0';
+        } else {
+            $result = $this->Tours_model->get_tours_and_type();
+        }
+        echo json_encode($result);
+    }
+
+    function update_tour()
+    {
+        $request_body = file_get_contents('php://input');
+
+        $req = json_decode($request_body);
+
+        $result = $this->Tours_model->update_tour($req);
+
+        echo json_encode($result);
+    }
 }

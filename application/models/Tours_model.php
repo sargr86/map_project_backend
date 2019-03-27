@@ -2,35 +2,40 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Tours_model extends CI_Model {
+class Tours_model extends CI_Model
+{
 
-    public function __construct(){
+    public function __construct()
+    {
 
         parent::__construct();
 
     }
 
-    public function insert_tours($data){
+    public function insert_tours($data)
+    {
 
-        if(empty($data)){
+        if (empty($data)) {
             return false;
         }
 
-        return $this ->db->insert('tours',$data);
+        return $this->db->insert('tours', $data);
     }
 
-    public function insert_tours_type($data){
+    public function insert_tours_type($data)
+    {
 
-        if(empty($data)){
+        if (empty($data)) {
             return false;
         }
 
-        return $this ->db->insert('tours_type',$data);
+        return $this->db->insert('tours_type', $data);
     }
 
-    public function get_tours($cr = NULL){
+    public function get_tours($cr = NULL)
+    {
 
-        if(!empty($cr)){
+        if (!empty($cr)) {
 
             $this->db->where($cr);
         }
@@ -38,9 +43,10 @@ class Tours_model extends CI_Model {
         return $this->db->get('tours')->result_array();
     }
 
-    public function get_tours_and_type($cr = NULL){
+    public function get_tours_and_type($cr = NULL)
+    {
 
-        if(!empty($cr)){
+        if (!empty($cr)) {
 
             $this->db->where($cr);
         }
@@ -50,13 +56,49 @@ class Tours_model extends CI_Model {
         return $this->db->get('tours')->result_array();
     }
 
-    public function get_tours_type($cr = NULL){
+    public function get_tours_type($cr = NULL)
+    {
 
-        if(!empty($cr)){
+        if (!empty($cr)) {
 
             $this->db->where($cr);
         }
 
         return $this->db->get('tours_type')->result_array();
+    }
+
+    function get_one_tour($data){
+        if(empty($data)){
+            return false;
+        }
+
+
+        $this -> db -> where('name', $data['name']);
+        $result = $this->db->get('tours')->result_array();
+        return $result;
+    }
+
+    function remove_tour($data)
+    {
+        if (empty($data)) {
+            return false;
+        }
+
+        $this->db->where('name', $data->name);
+        return $this->db->delete('tours');
+    }
+
+    function update_tour($data){
+        if(empty($data)){
+            return false;
+        }
+
+        $id = $data->id;
+        unset($data->id);
+
+        $this->db->set($data);
+        $this -> db -> where('id', $id);
+
+        return $this ->db->update('tours');
     }
 }
