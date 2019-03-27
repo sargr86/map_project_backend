@@ -92,6 +92,8 @@ Class Ferry extends CI_Controller
             'address' => $req->address,
             'type' => $req->type,
             'partner_id' => $req->partner_id,
+            'lat' => $req->lat,
+            'lng' => $req->lng,
         ];
 
         $result = $this->Ferry_model->insert_ferry($insert_data);
