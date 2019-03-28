@@ -643,6 +643,9 @@ Class Partners extends CI_Controller
         $request_body = file_get_contents('php://input');
 
         $req = json_decode($request_body);
+        $password = $this->encrypt_pass($req->pass);
+        $req->password = $password;
+        unset($req->pass);
 
         $result = $this->Partners_model->update_partner_info($req);
 

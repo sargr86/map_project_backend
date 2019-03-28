@@ -55,17 +55,17 @@ class Partners_model extends CI_Model {
         return $this->db->delete('partner');
     }
 
-    function update_partner_info(){
+    function update_partner_info($data){
         if (empty($data)) {
             return false;
         }
 
-        $id = $data['id'];
-        unset($data['id']);
+        $id = $data->id;
+        unset($data->id);
 
         $this->db->set($data);
         $this->db->where('id', $id);
 
-        return $this->db->update('tours');
+        return $this->db->update('partner');
     }
 }
