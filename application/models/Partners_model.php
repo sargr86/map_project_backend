@@ -36,4 +36,36 @@ class Partners_model extends CI_Model {
 
         return $result;
     }
+
+    function get_one_partner($data){
+        if (empty($data)) {
+            return false;
+        }
+
+        $this->db->where('id', $data['id']);
+        $result = $this->db->get('partner')->result_array();
+        return $result;
+    }
+
+    function remove_partner_info($data){
+        if (empty($data)) {
+            return false;
+        }
+        $this->db->where('id', $data->id);
+        return $this->db->delete('partner');
+    }
+
+    function update_partner_info(){
+        if (empty($data)) {
+            return false;
+        }
+
+        $id = $data['id'];
+        unset($data['id']);
+
+        $this->db->set($data);
+        $this->db->where('id', $id);
+
+        return $this->db->update('tours');
+    }
 }

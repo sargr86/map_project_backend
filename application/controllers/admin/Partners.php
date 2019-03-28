@@ -115,6 +115,21 @@ Class Partners extends CI_Controller
 
     }
 
+    function get_one_partner(){
+
+
+        $data = $this->input->get();
+        $result = $this->Partners_model->get_one_partner($data);
+
+        if (empty($result)) {
+            $response['message'] = 'Empty Data';
+            $response['status'] = '0';
+        }
+
+        $response['result'] = $result;
+        echo json_encode($response);
+    }
+
     public function partner_login()
     {
 
@@ -622,5 +637,30 @@ Class Partners extends CI_Controller
         ];
 
         echo json_encode($response);
+    }
+
+    function update_partner_info(){
+        $request_body = file_get_contents('php://input');
+
+        $req = json_decode($request_body);
+
+        $result = $this->Partners_model->update_partner_info($req);
+
+        echo json_encode($result);
+    }
+
+    function remove_partner_info(){
+        $request_body = file_get_contents('php://input');
+
+        $req = json_decode($request_body);
+
+        $result = $this->Partners_model->remove_partner_info($req);
+        if (!$result) {
+            $response['message'] = 'Data not removed please try again.';
+            $response['status'] = '0';
+        } else {
+            $result = $this->Partners_model->get_partners();
+        }
+        echo json_encode($result);
     }
 }

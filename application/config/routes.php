@@ -76,6 +76,10 @@ $route['all_ferry'] = 'Ferry/get_all_ferry';
 $route['addPartner'] = 'admin/Partners/add_partner';
 $route['allPartner'] = 'admin/Partners/get_partners';
 $route['checkPartner'] = 'admin/Partners/partner_login';
+$route['getOnePartner'] = 'admin/Partners/get_one_partner';
+$route['updatePartnerInfo'] = 'admin/Partners/update_partner_info';
+$route['removePartnerInfo'] = 'admin/Partners/remove_partner_info';
+
 
 $route['addFoodDrink'] = 'admin/FoodDrink/add_food_drink';
 $route['login'] = 'admin/Partners/login';
