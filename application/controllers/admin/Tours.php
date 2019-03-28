@@ -282,9 +282,7 @@ Class Tours extends CI_Controller
 
     function update_tour()
     {
-        $request_body = file_get_contents('php://input');
-
-        $req = json_decode($request_body);
+        $req = $this->input->post();
 
         $result = $this->Tours_model->update_tour($req);
 
