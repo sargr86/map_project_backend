@@ -85,7 +85,7 @@ class Tours_model extends CI_Model
             return false;
         }
 
-        $this->db->where('name', $data['name']);
+        $this->db->where('id', $data['id']);
         $result = $this->db->get('tours')->result_array();
         return $result;
     }
@@ -96,7 +96,7 @@ class Tours_model extends CI_Model
             return false;
         }
 
-        $this->db->where('name', $data->name);
+        $this->db->where('id', $data->id);
         return $this->db->delete('tours');
     }
 
