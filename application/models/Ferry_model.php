@@ -35,7 +35,7 @@ class Ferry_model extends CI_Model {
         }
 
 
-        $this -> db -> where('name', $data['name']);
+        $this -> db -> where('id', $data['id']);
         $result = $this->db->get('ferry')->result_array();
         return $result;
     }
@@ -59,7 +59,7 @@ class Ferry_model extends CI_Model {
             return false;
         }
 
-        $this -> db -> where('name', $data->name);
+        $this -> db -> where('id', $data->id);
         return $this ->db->delete('ferry');
     }
 }

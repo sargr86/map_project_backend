@@ -55,14 +55,14 @@ Class Ferry extends CI_Controller
             return false;
         }
 
-        if (empty($req->maxPeople)) {
+        if (empty($req->max_people)) {
             $response['message'] = 'Max People is required';
             $response['status'] = '0';
             echo json_encode($response);
             return false;
         }
 
-        if (empty($req->minPeople)) {
+        if (empty($req->min_people)) {
             $response['message'] = 'Min People is required';
             $response['status'] = '0';
             echo json_encode($response);
@@ -76,7 +76,7 @@ Class Ferry extends CI_Controller
             return false;
         }
 
-        if ($req->minPeople > $req->maxPeople) {
+        if ($req->min_people > $req->max_people) {
             $response['message'] = 'Min People is Max people';
             $response['status'] = '0';
             echo json_encode($response);
@@ -86,8 +86,8 @@ Class Ferry extends CI_Controller
         $insert_data = [
             'name' => $req->name,
             'email' => $req->email,
-            'max_people' => $req->maxPeople,
-            'min_people' => $req->minPeople,
+            'max_people' => $req->max_people,
+            'min_people' => $req->min_people,
             'phone' => $req->phone,
             'address' => $req->address,
             'type' => $req->type,
