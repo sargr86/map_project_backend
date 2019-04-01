@@ -255,9 +255,21 @@ Class Tours extends CI_Controller
     {
         $req = $this->input->post();
 
-        $result = $this->Tours_model->update_tour($req);
+        $this->load->library('form_validation');
 
-        echo json_encode($result);
+        if ($this->form_validation->run('add_tour') == FALSE) {
+            $errors = validation_errors_array(validation_errors());
+
+            if (!empty($errors) > 0) {
+                show_error_json(reset($errors));
+            }
+        } else {
+            $result = $this->Tours_model->update_tour($req);
+
+            echo json_encode($result);
+        }
+
+
     }
 
     function show_error($message, $status_code = 500)

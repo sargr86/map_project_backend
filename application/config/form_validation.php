@@ -32,5 +32,37 @@ $config = [
             'rules' => 'required'
         ],
 
+    ],
+    'add_ferry' => [
+        [
+            'field' => 'name',
+            'label' => 'Name',
+            'rules' => 'required'
+        ],
+        [
+            'field' => 'email',
+            'label' => 'E-mail',
+            'rules' => 'required'
+        ],
+        [
+            'field' => 'type',
+            'label' => 'Type',
+            'rules' => 'required'
+        ],
+        [
+            'field' => 'max_people',
+            'label' => 'Max people',
+            'rules' => 'required'
+        ],
+        [
+            'field' => 'min_people',
+            'label' => 'Min people',
+            'rules' => 'required'
+        ],
+        [
+            'field' => 'partner_id',
+            'label' => 'Partner',
+            'rules' => 'required'
+        ]
     ]
 ];

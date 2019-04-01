@@ -34,53 +34,39 @@ Class Ferry extends CI_Controller
 
         $req = json_decode($request_body);
 
-        if (empty($req->name)) {
-            $response['message'] = 'Ferry/Buss name is required';
+        if (empty($req->partner_id)) {
+            $response['message'] = 'Ferry partner is required';
             $response['status'] = '0';
-            echo json_encode($response);
-            return false;
         }
 
         if (empty($req->type)) {
             $response['message'] = 'Type is required';
             $response['status'] = '0';
-            echo json_encode($response);
-            return false;
-        }
-
-        if (empty($req->email)) {
-            $response['message'] = 'Ferry/Buss Email  is required';
-            $response['status'] = '0';
-            echo json_encode($response);
-            return false;
-        }
-
-        if (empty($req->max_people)) {
-            $response['message'] = 'Max People is required';
-            $response['status'] = '0';
-            echo json_encode($response);
-            return false;
         }
 
         if (empty($req->min_people)) {
             $response['message'] = 'Min People is required';
             $response['status'] = '0';
-            echo json_encode($response);
-            return false;
         }
 
-        if (empty($req->partner_id)) {
-            $response['message'] = 'Ferry/Buss partner is required';
+        if (empty($req->max_people)) {
+            $response['message'] = 'Max People is required';
             $response['status'] = '0';
-            echo json_encode($response);
-            return false;
+        }
+
+        if (empty($req->email)) {
+            $response['message'] = 'Ferry Email  is required';
+            $response['status'] = '0';
+        }
+
+        if (empty($req->name)) {
+            $response['message'] = 'Ferry name is required';
+            $response['status'] = '0';
         }
 
         if ($req->min_people > $req->max_people) {
             $response['message'] = 'Min People is Max people';
             $response['status'] = '0';
-            echo json_encode($response);
-            return false;
         }
 
         $insert_data = [
@@ -95,15 +81,20 @@ Class Ferry extends CI_Controller
             'lat' => $req->lat,
             'lng' => $req->lng,
         ];
+        if ($response['status'] == '0') {
+            show_error_json($response['message']);
+        } else {
+            $result = $this->Ferry_model->insert_ferry($insert_data);
 
-        $result = $this->Ferry_model->insert_ferry($insert_data);
+            if (!$result) {
+                $response['message'] = 'Data not saved please try again.';
+                $response['status'] = '0';
+            }
 
-        if (!$result) {
-            $response['message'] = 'Data not saved please try again.';
-            $response['status'] = '0';
+            echo json_encode($response);
         }
 
-        echo json_encode($response);
+
     }
 
     public function get_all_ferry()
