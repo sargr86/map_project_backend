@@ -46,14 +46,14 @@ Class Partners extends CI_Controller
             return false;
         }
 
-        if (empty($req->firstName)) {
+        if (empty($req->first_name)) {
             $response['message'] = 'Partner first name is required';
             $response['status'] = '0';
             echo json_encode($response);
             return false;
         }
 
-        if (empty($req->lastName)) {
+        if (empty($req->last_name)) {
             $response['message'] = 'Partner last name is required';
             $response['status'] = '0';
             echo json_encode($response);
@@ -70,8 +70,8 @@ Class Partners extends CI_Controller
         $password = $this->encrypt_pass($req->pass);
 
         $insert_data = [
-            'first_name' => $req->firstName,
-            'last_name' => $req->lastName,
+            'first_name' => $req->first_name,
+            'last_name' => $req->last_name,
             'email' => $req->email,
             'password' => $password,
             'type' => $req->type,
