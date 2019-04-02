@@ -89,6 +89,12 @@ Class Partners extends CI_Controller
             $response['status'] = '0';
         }
 
+        if($this->Partners_model->mail_exists($req->email)){
+            $response['message'] = 'Partner email exists';
+            $response['status'] = '0';
+        }
+
+
         return $response;
     }
 
@@ -685,6 +691,5 @@ Class Partners extends CI_Controller
 
         echo json_encode($response);
     }
-
 
 }

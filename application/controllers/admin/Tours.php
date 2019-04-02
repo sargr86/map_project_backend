@@ -40,25 +40,27 @@ Class Tours extends CI_Controller
 
                 $res['message'] = $this->upload->display_errors();
                 $res['status'] = '0';
+                show_error_json($res['message']);
+            } else {
+                $file_info = $this->upload->data();
 
+
+                $request_body = $this->input->post();
+                $request_body['img'] = $file_info['file_name'];
+
+                $result = $this->Tours_model->insert_tours($request_body);
+
+                if (!$result) {
+                    $res['message'] = 'Data not saved please try again.';
+                    $res['status'] = '0';
+                }
+
+                echo json_encode($res);
+
+                return false;
             }
 
-            $file_info = $this->upload->data();
 
-
-            $request_body = $this->input->post();
-            $request_body['img'] = $file_info['file_name'];
-
-            $result = $this->Tours_model->insert_tours($request_body);
-
-            if (!$result) {
-                $res['message'] = 'Data not saved please try again.';
-                $res['status'] = '0';
-            }
-
-            echo json_encode($res);
-
-            return false;
         }
 
         return false;

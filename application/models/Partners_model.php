@@ -77,4 +77,15 @@ class Partners_model extends CI_Model
 
         return $this->db->update('partner');
     }
+
+    function mail_exists($email){
+        $this->db->where('email',$email);
+        $query = $this->db->get('partner');
+        if ($query->num_rows() > 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }
