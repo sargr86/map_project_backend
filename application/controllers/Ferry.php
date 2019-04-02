@@ -18,6 +18,46 @@ Class Ferry extends CI_Controller
     public function insert_ferry()
     {
 
+        $request_body = file_get_contents('php://input');
+
+        $req = json_decode($request_body);
+
+        $res = $this->validateFerry($req);
+
+        if ($res['status'] == '0') {
+            show_error_json($res['message']);
+        } else {
+
+
+            $insert_data = [
+                'name' => $req->name,
+                'email' => $req->email,
+                'max_people' => $req->max_people,
+                'min_people' => $req->min_people,
+                'phone' => $req->phone,
+                'address' => $req->address,
+                'type' => $req->type,
+                'partner_id' => $req->partner_id,
+                'lat' => $req->lat,
+                'lng' => $req->lng,
+            ];
+
+
+            $result = $this->Ferry_model->insert_ferry($insert_data);
+
+            if (!$result) {
+                $res['message'] = 'Data not saved please try again.';
+                $res['status'] = '0';
+                show_error_json($res['message']);
+            } else echo json_encode($res);
+        }
+
+
+    }
+
+    function validateFerry($req,$update = false)
+    {
+
         $response = [
             'status' => '1',
             'message' => []
@@ -32,50 +72,15 @@ Class Ferry extends CI_Controller
         }
 
 
-        $request_body = file_get_contents('php://input');
-
-        $req = json_decode($request_body);
-
         if (empty($req->partner_id)) {
             $response['message'] = 'Ferry partner is required';
             $response['status'] = '0';
         }
 
-        if (empty($req->type)) {
+        if (empty($req->type) && !$update) {
             $response['message'] = 'Type is required';
             $response['status'] = '0';
         }
-
-        if (empty($req->min_people)) {
-            $response['message'] = 'Min People is required';
-            $response['status'] = '0';
-        }
-
-        if (empty($req->max_people)) {
-            $response['message'] = 'Max People is required';
-            $response['status'] = '0';
-        }
-
-        if (empty($req->lat)) {
-            $response['message'] = 'Latitude is required';
-            $response['status'] = '0';
-        }
-
-        if (empty($req->lng)) {
-            $response['message'] = 'Longitude is required';
-            $response['status'] = '0';
-        }
-
-        if (empty($req->email)) {
-            $response['message'] = 'Ferry Email  is required';
-            $response['status'] = '0';
-        }
-
-        if (empty($req->name)) {
-            $response['message'] = 'Ferry name is required';
-            $response['status'] = '0';
-        }
-
         if (empty($req->address)) {
             $response['message'] = 'Ferry address is required';
             $response['status'] = '0';
@@ -86,37 +91,35 @@ Class Ferry extends CI_Controller
             $response['status'] = '0';
         }
 
-        if ($req->min_people > $req->max_people) {
-            $response['message'] = 'Min People is Max people';
+        if (empty($req->lng)) {
+            $response['message'] = 'Longitude is required';
             $response['status'] = '0';
         }
-
-        $insert_data = [
-            'name' => $req->name,
-            'email' => $req->email,
-            'max_people' => $req->max_people,
-            'min_people' => $req->min_people,
-            'phone' => $req->phone,
-            'address' => $req->address,
-            'type' => $req->type,
-            'partner_id' => $req->partner_id,
-            'lat' => $req->lat,
-            'lng' => $req->lng,
-        ];
-        if ($response['status'] == '0') {
-            show_error_json($response['message']);
-        } else {
-            $result = $this->Ferry_model->insert_ferry($insert_data);
-
-            if (!$result) {
-                $response['message'] = 'Data not saved please try again.';
-                $response['status'] = '0';
-            }
-
-            echo json_encode($response);
+        if (empty($req->lat)) {
+            $response['message'] = 'Latitude is required';
+            $response['status'] = '0';
         }
-
-
+        if ($req->min_people > $req->max_people) {
+            $response['message'] = 'Min People is greater than Max people';
+            $response['status'] = '0';
+        }
+        if (empty($req->max_people)) {
+            $response['message'] = 'Max People is required';
+            $response['status'] = '0';
+        }
+        if (empty($req->min_people)) {
+            $response['message'] = 'Min People is required';
+            $response['status'] = '0';
+        }
+        if (empty($req->email)) {
+            $response['message'] = 'Ferry Email  is required';
+            $response['status'] = '0';
+        }
+        if (empty($req->name)) {
+            $response['message'] = 'Ferry name is required';
+            $response['status'] = '0';
+        }
+        return $response;
     }
 
     public function get_all_ferry()
@@ -162,10 +165,16 @@ Class Ferry extends CI_Controller
 
         $req = json_decode($request_body);
 
+        $res = $this->validateFerry($req,true);
 
-        $result = $this->Ferry_model->update_ferry($req);
+        if ($res['status'] == '0') {
+            show_error_json($res['message']);
+        } else {
 
-        echo json_encode($result);
+            $result = $this->Ferry_model->update_ferry($req);
+
+            echo json_encode($result);
+        }
     }
 
 

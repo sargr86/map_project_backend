@@ -102,6 +102,7 @@ class Tours_model extends CI_Model
 
     function update_tour($data)
     {
+
         if (empty($data)) {
             return false;
         }
@@ -110,6 +111,8 @@ class Tours_model extends CI_Model
         unset($data['id']);
         $data['img'] = $data['upload_image'];
         unset($data['upload_image']);
+
+
 
         $this->db->set($data);
         $this->db->where('id', $id);

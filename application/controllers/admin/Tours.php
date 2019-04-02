@@ -16,30 +16,13 @@ Class Tours extends CI_Controller
     public function add_tours()
     {
 
-        $response = [
-            'status' => '1',
-            'message' => [],
-            'result' => []
-        ];
+        $req = $this->input->post();
+        $res = $this->validateTour($req);
 
-        if ($this->input->method() != 'post') {
-
-            $response['message'] = 'error!';
-            $response['status'] = '0';
-            echo json_encode($response);
-            return false;
-        }
-
-
-        $this->load->library('form_validation');
-
-        if ($this->form_validation->run('add_tour') == FALSE) {
-
-            $errors = validation_errors_array(validation_errors());
-            if (!empty($errors) > 0) {
-                show_error_json(reset($errors));
-            }
+        if ($res['status'] == '0') {
+            show_error_json($res['message']);
         } else {
+
             $url = '../uploads/tour';
 
             if (!is_dir($url)) {
@@ -55,36 +38,103 @@ Class Tours extends CI_Controller
 
             if ($this->upload->do_upload('upload_image') == false) {
 
-                $response['message'] = $this->upload->display_errors();
-                $response['status'] = '0';
+                $res['message'] = $this->upload->display_errors();
+                $res['status'] = '0';
 
             }
 
             $file_info = $this->upload->data();
 
 
-            if ($response['status'] == '0') {
-                show_error_json($response['message']);
-            } else {
+            $request_body = $this->input->post();
+            $request_body['img'] = $file_info['file_name'];
 
+            $result = $this->Tours_model->insert_tours($request_body);
 
-                $request_body = $this->input->post();
-                $request_body['img'] = $file_info['file_name'];
-
-                $result = $this->Tours_model->insert_tours($request_body);
-
-                if (!$result) {
-                    $response['message'] = 'Data not saved please try again.';
-                    $response['status'] = '0';
-                }
-
-                echo json_encode($response);
+            if (!$result) {
+                $res['message'] = 'Data not saved please try again.';
+                $res['status'] = '0';
             }
+
+            echo json_encode($res);
 
             return false;
         }
 
         return false;
+    }
+
+    function update_tour()
+    {
+        $req = $this->input->post();
+
+        $this->load->library('form_validation');
+
+        $res = $this->validateTour($req, true);
+
+
+        if ($res['status'] == '0') {
+            show_error_json($res['message']);
+        } else {
+
+            $result = $this->Tours_model->update_tour($req);
+
+            echo json_encode($result);
+        }
+
+
+    }
+
+    function validateTour($req, $update = false)
+    {
+
+        $response = [
+            'status' => '1',
+            'message' => [],
+            'result' => []
+        ];
+
+        if ($this->input->method() != 'post') {
+
+            $response['message'] = 'error!';
+            $response['status'] = '0';
+            echo json_encode($response);
+            return false;
+        }
+
+        if (empty($req['partner_id'])) {
+            $response['message'] = 'Partner is required';
+            $response['status'] = '0';
+        }
+
+        if (empty($req['tours_type_id'])) {
+            $response['message'] = 'Tour type is required';
+            $response['status'] = '0';
+        }
+
+        if (empty($req['address'])) {
+            $response['message'] = 'Tour address is required';
+            $response['status'] = '0';
+        }
+
+        if (empty($req['lng'])) {
+            $response['message'] = 'Tour longitude is required';
+            $response['status'] = '0';
+        }
+
+        if (empty($req['lat'])) {
+            $response['message'] = 'Tour latitude is required';
+            $response['status'] = '0';
+        }
+
+
+        if (empty($req['name'])) {
+            $response['message'] = 'Tour name is required';
+            $response['status'] = '0';
+        }
+
+
+        return $response;
     }
 
     public function add_tour_type()
@@ -251,26 +301,6 @@ Class Tours extends CI_Controller
         echo json_encode($result);
     }
 
-    function update_tour()
-    {
-        $req = $this->input->post();
-
-        $this->load->library('form_validation');
-
-        if ($this->form_validation->run('add_tour') == FALSE) {
-            $errors = validation_errors_array(validation_errors());
-
-            if (!empty($errors) > 0) {
-                show_error_json(reset($errors));
-            }
-        } else {
-            $result = $this->Tours_model->update_tour($req);
-
-            echo json_encode($result);
-        }
-
-
-    }
 
     function show_error($message, $status_code = 500)
     {
