@@ -10,6 +10,8 @@ Class Ferry extends CI_Controller
         parent::__construct();
 
         $this->load->model("Ferry_model");
+        $this->load->helper('show_error_json');
+        $this->load->helper('validation_errors_array');
 
     }
 
@@ -54,6 +56,16 @@ Class Ferry extends CI_Controller
             $response['status'] = '0';
         }
 
+        if (empty($req->lat)) {
+            $response['message'] = 'Latitude is required';
+            $response['status'] = '0';
+        }
+
+        if (empty($req->lng)) {
+            $response['message'] = 'Longitude is required';
+            $response['status'] = '0';
+        }
+
         if (empty($req->email)) {
             $response['message'] = 'Ferry Email  is required';
             $response['status'] = '0';
@@ -61,6 +73,16 @@ Class Ferry extends CI_Controller
 
         if (empty($req->name)) {
             $response['message'] = 'Ferry name is required';
+            $response['status'] = '0';
+        }
+
+        if (empty($req->address)) {
+            $response['message'] = 'Ferry address is required';
+            $response['status'] = '0';
+        }
+
+        if (empty($req->phone)) {
+            $response['message'] = 'Ferry phone is required';
             $response['status'] = '0';
         }
 
@@ -139,6 +161,7 @@ Class Ferry extends CI_Controller
         $request_body = file_get_contents('php://input');
 
         $req = json_decode($request_body);
+
 
         $result = $this->Ferry_model->update_ferry($req);
 

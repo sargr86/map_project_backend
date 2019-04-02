@@ -64,5 +64,12 @@ $config = [
             'label' => 'Partner',
             'rules' => 'required'
         ]
+    ],
+    'add_partner' => [
+        [
+            'field' => 'first_name',
+            'label' => ' First Name',
+            'rules' => 'required'
+        ],
     ]
 ];

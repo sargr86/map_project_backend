@@ -9,9 +9,45 @@ Class Partners extends CI_Controller
 
         parent::__construct();
         $this->load->model("Partners_model");
+
     }
 
     public function add_partner()
+    {
+
+        $request_body = file_get_contents('php://input');
+
+        $req = json_decode($request_body);
+
+        $res = $this->validatePartner($req);
+
+        if ($res['status'] == '0') {
+            show_error_json($res['message']);
+        } else {
+            $password = $this->encrypt_pass($req->pass);
+
+            $insert_data = [
+                'first_name' => $req->first_name,
+                'last_name' => $req->last_name,
+                'email' => $req->email,
+                'password' => $password,
+                'type' => $req->type,
+            ];
+
+            $result = $this->Partners_model->insert_partners($insert_data);
+
+            if (!$result) {
+                $res['message'] = 'Data not saved please try again.';
+                $res['status'] = '0';
+            }
+
+            echo json_encode($res);
+        }
+
+
+    }
+
+    public function validatePartner($req, $update = false)
     {
 
         $response = [
@@ -28,63 +64,72 @@ Class Partners extends CI_Controller
             return false;
         }
 
-        $request_body = file_get_contents('php://input');
-
-        $req = json_decode($request_body);
-
-        if (empty($req->pass)) {
-            $response['message'] = 'Partner password is required';
-            $response['status'] = '0';
-            echo json_encode($response);
-            return false;
-        }
 
         if (empty($req->type)) {
             $response['message'] = 'Partner type is required';
             $response['status'] = '0';
-            echo json_encode($response);
-            return false;
         }
 
-        if (empty($req->first_name)) {
-            $response['message'] = 'Partner first name is required';
+        if (empty($req->pass) && !$update) {
+            $response['message'] = 'Partner password is required';
             $response['status'] = '0';
-            echo json_encode($response);
-            return false;
-        }
-
-        if (empty($req->last_name)) {
-            $response['message'] = 'Partner last name is required';
-            $response['status'] = '0';
-            echo json_encode($response);
-            return false;
         }
 
         if (empty($req->email)) {
             $response['message'] = 'Partner email is required';
             $response['status'] = '0';
-            echo json_encode($response);
-            return false;
         }
 
-        $password = $this->encrypt_pass($req->pass);
-
-        $insert_data = [
-            'first_name' => $req->first_name,
-            'last_name' => $req->last_name,
-            'email' => $req->email,
-            'password' => $password,
-            'type' => $req->type,
-        ];
-
-        $result = $this->Partners_model->insert_partners($insert_data);
-
-        if (!$result) {
-            $response['message'] = 'Data not saved please try again.';
+        if (empty($req->last_name)) {
+            $response['message'] = 'Partner last name is required';
+            $response['status'] = '0';
+        }
+        if (empty($req->first_name)) {
+            $response['message'] = 'Partner first name is required';
             $response['status'] = '0';
         }
 
-        echo json_encode($response);
+        return $response;
+    }
+
+    function update_partner_info()
+    {
+        $request_body = file_get_contents('php://input');
+
+        $req = json_decode($request_body);
+
+        $res = $this->validatePartner($req, true);
+
+        if ($res['status'] != '0') {
+            $password = $this->encrypt_pass($req->pass);
+            $req->password = $password;
+            unset($req->pass);
+
+            $result = $this->Partners_model->update_partner_info($req);
+            echo json_encode($result);
+        }
+
+        else {
+            show_error_json($res['message']);
+        }
+
+
+    }
+
+    function remove_partner_info()
+    {
+        $request_body = file_get_contents('php://input');
+
+        $req = json_decode($request_body);
+
+        $result = $this->Partners_model->remove_partner_info($req);
+        if (!$result) {
+            $response['message'] = 'Data not removed please try again.';
+            $response['status'] = '0';
+        } else {
+            $result = $this->Partners_model->get_partners();
+        }
+        echo json_encode($result);
     }
 
     public function get_partners()
@@ -115,7 +160,8 @@ Class Partners extends CI_Controller
 
     }
 
-    function get_one_partner(){
+    function get_one_partner()
+    {
 
 
         $data = $this->input->get();
@@ -282,12 +328,12 @@ Class Partners extends CI_Controller
             'status' => '1',
             'message' => [],
             'result' => [],
-            'count'  =>  5,
+            'count' => 5,
         ];
 
         $response['result'] = [
             0 => [
-                'id'   => 1,
+                'id' => 1,
                 'title' => 'title1',
                 'metatitle' => 'metatitle1',
                 'img' => 'img1.jpg',
@@ -298,7 +344,7 @@ Class Partners extends CI_Controller
                 'creted_date' => '21.06.18'
             ],
             1 => [
-                'id'    => 2,
+                'id' => 2,
                 'title' => 'title2',
                 'metatitle' => 'metatitle2',
                 'img' => 'img2.jpg',
@@ -309,7 +355,7 @@ Class Partners extends CI_Controller
                 'creted_date' => '21.06.18'
             ],
             2 => [
-                'id'    => 3,
+                'id' => 3,
                 'title' => 'title3',
                 'metatitle' => 'metatitle3',
                 'img' => 'img3.jpg',
@@ -320,7 +366,7 @@ Class Partners extends CI_Controller
                 'creted_date' => '21.06.18'
             ],
             3 => [
-                'id'    => 4,
+                'id' => 4,
                 'title' => 'title4',
                 'metatitle' => 'metatitle4',
                 'img' => 'img4.jpg',
@@ -331,7 +377,7 @@ Class Partners extends CI_Controller
                 'creted_date' => '21.06.18'
             ],
             4 => [
-                'id'   => 5,
+                'id' => 5,
                 'title' => 'title5',
                 'metatitle' => 'metatitle4',
                 'img' => 'img5.jpg',
@@ -346,15 +392,15 @@ Class Partners extends CI_Controller
         echo json_encode($response);
     }
 
-    public function single($id= Null)
+    public function single($id = Null)
     {
 
-        if(empty($id)){
+        if (empty($id)) {
             $response = [
                 'status' => '0',
                 'message' => ["please check post"],
                 'result' => [],
-                'count'  =>  0,
+                'count' => 0,
             ];
             echo json_encode($response);
             return false;
@@ -364,13 +410,13 @@ Class Partners extends CI_Controller
             'status' => '1',
             'message' => [],
             'result' => [],
-            'post_count'  =>  20,
-            'comment_count'  =>  20,
+            'post_count' => 20,
+            'comment_count' => 20,
         ];
 
         $arr = [
             0 => [
-                'id'   => 1,
+                'id' => 1,
                 'title' => 'title1',
                 'metatitle' => 'metatitle1',
                 'img' => 'img1.jpg',
@@ -381,7 +427,7 @@ Class Partners extends CI_Controller
                 'creted_date' => '21.06.18'
             ],
             1 => [
-                'id'    => 2,
+                'id' => 2,
                 'title' => 'title2',
                 'metatitle' => 'metatitle2',
                 'img' => 'img2.jpg',
@@ -392,7 +438,7 @@ Class Partners extends CI_Controller
                 'creted_date' => '21.06.18'
             ],
             2 => [
-                'id'    => 3,
+                'id' => 3,
                 'title' => 'title3',
                 'metatitle' => 'metatitle3',
                 'img' => 'img3.jpg',
@@ -403,7 +449,7 @@ Class Partners extends CI_Controller
                 'creted_date' => '21.06.18'
             ],
             3 => [
-                'id'    => 4,
+                'id' => 4,
                 'title' => 'title4',
                 'metatitle' => 'metatitle4',
                 'img' => 'img4.jpg',
@@ -414,7 +460,7 @@ Class Partners extends CI_Controller
                 'creted_date' => '21.06.18'
             ],
             4 => [
-                'id'   => 5,
+                'id' => 5,
                 'title' => 'title5',
                 'metatitle' => 'metatitle4',
                 'img' => 'img5.jpg',
@@ -428,7 +474,7 @@ Class Partners extends CI_Controller
 
         $response['result']['related'] = [
             0 => [
-                'id'   => 1,
+                'id' => 1,
                 'title' => 'title1',
                 'metatitle' => 'metatitle1',
                 'img' => 'img1.jpg',
@@ -439,7 +485,7 @@ Class Partners extends CI_Controller
                 'creted_date' => '21.06.18'
             ],
             1 => [
-                'id'    => 2,
+                'id' => 2,
                 'title' => 'title2',
                 'metatitle' => 'metatitle2',
                 'img' => 'img2.jpg',
@@ -450,7 +496,7 @@ Class Partners extends CI_Controller
                 'creted_date' => '21.06.18'
             ],
             2 => [
-                'id'    => 3,
+                'id' => 3,
                 'title' => 'title3',
                 'metatitle' => 'metatitle3',
                 'img' => 'img3.jpg',
@@ -462,31 +508,31 @@ Class Partners extends CI_Controller
             ],
         ];
 
-        $response['result']['post'] = $arr[$id+1];
+        $response['result']['post'] = $arr[$id + 1];
         $response['result']['comment'] = [
             0 => [
-                'id'   => 1,
+                'id' => 1,
                 'name' => 'Jane Doe',
                 'img' => 'avatar.jpg',
                 'comment' => 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece',
                 'creted_date' => '16.04.14'
             ],
             1 => [
-                'id'   => 2,
+                'id' => 2,
                 'name' => 'Jane Doe2',
                 'img' => 'avatar2.jpg',
                 'comment' => 'Contrary to sds belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock,',
                 'creted_date' => '16.04.20'
             ],
             2 => [
-                'id'   => 3,
+                'id' => 3,
                 'name' => 'Jane Doe2',
                 'img' => 'avatar2.jpg',
                 'comment' => 'Contrary to sdsds belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock,',
                 'creted_date' => '16.09.14'
             ],
             3 => [
-                'id'   => 4,
+                'id' => 4,
                 'name' => 'Jane Doe2',
                 'img' => 'avatar2.jpg',
                 'comment' => 'Contrary to fdgdf belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock,',
@@ -505,13 +551,13 @@ Class Partners extends CI_Controller
             'status' => '1',
             'message' => [],
             'result' => [],
-            'post_count'  =>  20,
-            'comment_count'  =>  20,
+            'post_count' => 20,
+            'comment_count' => 20,
         ];
 
         $response['result'] = [
             0 => [
-                'id'   => 1,
+                'id' => 1,
                 'title' => 'title1',
                 'metatitle' => 'metatitle1',
                 'img' => 'img1.jpg',
@@ -522,7 +568,7 @@ Class Partners extends CI_Controller
                 'creted_date' => '21.06.18'
             ],
             1 => [
-                'id'    => 2,
+                'id' => 2,
                 'title' => 'title2',
                 'metatitle' => 'metatitle2',
                 'img' => 'img2.jpg',
@@ -533,7 +579,7 @@ Class Partners extends CI_Controller
                 'creted_date' => '21.06.18'
             ],
             2 => [
-                'id'    => 3,
+                'id' => 3,
                 'title' => 'title3',
                 'metatitle' => 'metatitle3',
                 'img' => 'img3.jpg',
@@ -544,7 +590,7 @@ Class Partners extends CI_Controller
                 'creted_date' => '21.06.18'
             ],
             3 => [
-                'id'    => 4,
+                'id' => 4,
                 'title' => 'title4',
                 'metatitle' => 'metatitle4',
                 'img' => 'img4.jpg',
@@ -555,7 +601,7 @@ Class Partners extends CI_Controller
                 'creted_date' => '21.06.18'
             ],
             4 => [
-                'id'   => 5,
+                'id' => 5,
                 'title' => 'title5',
                 'metatitle' => 'metatitle4',
                 'img' => 'img5.jpg',
@@ -570,7 +616,8 @@ Class Partners extends CI_Controller
         echo json_encode($response);
     }
 
-    public function add_comment(){
+    public function add_comment()
+    {
 
         $response = [
             'status' => '0',
@@ -607,28 +654,28 @@ Class Partners extends CI_Controller
 
         $response['result'] = [
             0 => [
-                'id'   => 5,
+                'id' => 5,
                 'name' => 'Jane Doe5',
                 'img' => 'avatar.jpg',
                 'comment' => 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece',
                 'creted_date' => '16.04.14'
             ],
             1 => [
-                'id'   => 6,
+                'id' => 6,
                 'name' => 'Jane Doe6',
                 'img' => 'avatar2.jpg',
                 'comment' => 'Contrary to sds belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock,',
                 'creted_date' => '16.04.20'
             ],
             2 => [
-                'id'   => 7,
+                'id' => 7,
                 'name' => 'Jane Doe7',
                 'img' => 'avatar2.jpg',
                 'comment' => 'Contrary to sdsds belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock,',
                 'creted_date' => '16.09.14'
             ],
             3 => [
-                'id'   => 8,
+                'id' => 8,
                 'name' => 'Jane Doe8',
                 'img' => 'avatar2.jpg',
                 'comment' => 'Contrary to fdgdf belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock,',
@@ -639,31 +686,5 @@ Class Partners extends CI_Controller
         echo json_encode($response);
     }
 
-    function update_partner_info(){
-        $request_body = file_get_contents('php://input');
 
-        $req = json_decode($request_body);
-        $password = $this->encrypt_pass($req->pass);
-        $req->password = $password;
-        unset($req->pass);
-
-        $result = $this->Partners_model->update_partner_info($req);
-
-        echo json_encode($result);
-    }
-
-    function remove_partner_info(){
-        $request_body = file_get_contents('php://input');
-
-        $req = json_decode($request_body);
-
-        $result = $this->Partners_model->remove_partner_info($req);
-        if (!$result) {
-            $response['message'] = 'Data not removed please try again.';
-            $response['status'] = '0';
-        } else {
-            $result = $this->Partners_model->get_partners();
-        }
-        echo json_encode($result);
-    }
 }

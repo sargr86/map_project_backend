@@ -2,34 +2,38 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Partners_model extends CI_Model {
+class Partners_model extends CI_Model
+{
 
-    public function __construct(){
+    public function __construct()
+    {
 
         parent::__construct();
 
     }
 
-    public function insert_partners($data){
+    public function insert_partners($data)
+    {
 
-        if(empty($data)){
+        if (empty($data)) {
             return false;
         }
 
-        return $this ->db->insert('partner',$data);
+        return $this->db->insert('partner', $data);
     }
 
 
-    public function get_partners($cr = NULL,$bool = NULL){
+    public function get_partners($cr = NULL, $bool = NULL)
+    {
 
-        if(!empty($cr)){
+        if (!empty($cr)) {
 
             $this->db->where($cr);
         }
 
-        if(!$bool){
-          $result =  $this->db->get('partner')->result_array();
-        }else{
+        if (!$bool) {
+            $result = $this->db->get('partner')->result_array();
+        } else {
 
             $result = $this->db->get('partner')->row_array();
         }
@@ -37,17 +41,21 @@ class Partners_model extends CI_Model {
         return $result;
     }
 
-    function get_one_partner($data){
+    function get_one_partner($data)
+    {
         if (empty($data)) {
             return false;
         }
 
         $this->db->where('id', $data['id']);
-        $result = $this->db->get('partner')->result_array();
+        $this->db->select('email,first_name,last_name,type,id');
+        $this->db->from('partner');
+        $result = $this->db->get()->result_array();
         return $result;
     }
 
-    function remove_partner_info($data){
+    function remove_partner_info($data)
+    {
         if (empty($data)) {
             return false;
         }
@@ -55,7 +63,8 @@ class Partners_model extends CI_Model {
         return $this->db->delete('partner');
     }
 
-    function update_partner_info($data){
+    function update_partner_info($data)
+    {
         if (empty($data)) {
             return false;
         }
