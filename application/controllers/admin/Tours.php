@@ -222,8 +222,6 @@ Class Tours extends CI_Controller
 
     public function get_tour()
     {
-
-
         $response = [
             'status' => '1',
             'message' => []
@@ -301,23 +299,5 @@ Class Tours extends CI_Controller
         $result = $this->Tours_model->update_tour_type($req);
 
         echo json_encode($result);
-    }
-
-
-    function show_error($message, $status_code = 500)
-    {
-        header('Cache-Control: no-cache, must-revalidate');
-        header('Content-type: application/json');
-        header("HTTP/1.1 500 Internal Server Error");
-
-        echo json_encode(
-            array(
-                'status' => FALSE,
-                'error' => 'Internal Server Error',
-                'message' => $message
-            )
-        );
-
-        exit;
     }
 }

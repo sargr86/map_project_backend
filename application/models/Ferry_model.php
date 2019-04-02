@@ -2,26 +2,30 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Ferry_model extends CI_Model {
+class Ferry_model extends CI_Model
+{
 
-    public function __construct(){
+    public function __construct()
+    {
 
         parent::__construct();
 
     }
 
-    public function  insert_ferry($data){
+    public function insert_ferry($data)
+    {
 
-        if(empty($data)){
+        if (empty($data)) {
             return false;
         }
 
-        return $this ->db->insert('ferry',$data);
+        return $this->db->insert('ferry', $data);
     }
 
-    public function get_ferry($cr = NULL){
+    public function get_ferry($cr = NULL)
+    {
 
-        if(!empty($cr)){
+        if (!empty($cr)) {
 
             $this->db->where($cr);
         }
@@ -29,19 +33,21 @@ class Ferry_model extends CI_Model {
         return $this->db->get('ferry')->result_array();
     }
 
-    function get_one_ferry($data){
-        if(empty($data)){
+    function get_one_ferry($data)
+    {
+        if (empty($data)) {
             return false;
         }
 
 
-        $this -> db -> where('id', $data['id']);
+        $this->db->where('id', $data['id']);
         $result = $this->db->get('ferry')->result_array();
         return $result;
     }
 
-    function update_ferry($data){
-        if(empty($data)){
+    function update_ferry($data)
+    {
+        if (empty($data)) {
             return false;
         }
 
@@ -49,17 +55,29 @@ class Ferry_model extends CI_Model {
         unset($data->id);
 
         $this->db->set($data);
-        $this -> db -> where('id', $id);
+        $this->db->where('id', $id);
 
-        return $this ->db->update('ferry');
+        return $this->db->update('ferry');
     }
 
-    function remove_ferry($data){
-        if(empty($data)){
+    function remove_ferry($data)
+    {
+        if (empty($data)) {
             return false;
         }
 
-        $this -> db -> where('id', $data->id);
-        return $this ->db->delete('ferry');
+        $this->db->where('id', $data->id);
+        return $this->db->delete('ferry');
+    }
+
+    function mail_exists($email)
+    {
+        $this->db->where('email', $email);
+        $query = $this->db->get('ferry');
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

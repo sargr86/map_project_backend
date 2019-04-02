@@ -55,7 +55,7 @@ Class Ferry extends CI_Controller
 
     }
 
-    function validateFerry($req,$update = false)
+    function validateFerry($req, $update = false)
     {
 
         $response = [
@@ -119,6 +119,12 @@ Class Ferry extends CI_Controller
             $response['message'] = 'Ferry name is required';
             $response['status'] = '0';
         }
+
+        if ($this->Ferry_model->mail_exists($req->email)) {
+            $response['message'] = 'Ferry email exists';
+            $response['status'] = '0';
+        }
+
         return $response;
     }
 
@@ -165,7 +171,7 @@ Class Ferry extends CI_Controller
 
         $req = json_decode($request_body);
 
-        $res = $this->validateFerry($req,true);
+        $res = $this->validateFerry($req, true);
 
         if ($res['status'] == '0') {
             show_error_json($res['message']);
