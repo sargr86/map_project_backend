@@ -24,7 +24,7 @@ Class Ferry extends CI_Controller
 
         $res = $this->validateFerry($req);
 
-        if ($res['status'] == '0') {
+        if ($res['status'] == 0) {
             show_error_json($res['message']);
         } else {
 
@@ -66,7 +66,7 @@ Class Ferry extends CI_Controller
         if ($this->input->method() != 'post') {
 
             $response['message'] = 'error!';
-            $response['status'] = '0';
+            $response['status'] = 0;
             echo json_encode($response);
             return false;
         }
@@ -74,55 +74,72 @@ Class Ferry extends CI_Controller
 
         if (empty($req->partner_id)) {
             $response['message'] = 'Ferry partner is required';
-            $response['status'] = '0';
+            $response['status'] = 0;
         }
 
         if (empty($req->type) && !$update) {
             $response['message'] = 'Type is required';
-            $response['status'] = '0';
+            $response['status'] = 0;
         }
         if (empty($req->address)) {
             $response['message'] = 'Ferry address is required';
-            $response['status'] = '0';
+            $response['status'] = 0;
         }
 
         if (empty($req->phone)) {
-            $response['message'] = 'Ferry phone is required';
-            $response['status'] = '0';
+            $response['message'] = 'Phone is required';
+            $response['status'] = 0;
         }
 
         if (empty($req->lng)) {
             $response['message'] = 'Longitude is required';
-            $response['status'] = '0';
+            $response['status'] = 0;
+        } else {
+            if (!preg_match(LONGITUDE_PATTERN, $req->lng)) {
+                $response['message'] = 'Ferry longitude is invalid';
+                $response['status'] = 0;
+            }
         }
         if (empty($req->lat)) {
             $response['message'] = 'Latitude is required';
-            $response['status'] = '0';
+            $response['status'] = 0;
+        } else {
+            if (!preg_match(LATITUDE_PATTERN, $req->lat)) {
+                $response['message'] = 'Ferry latitude is invalid';
+                $response['status'] = 0;
+            }
         }
         if ($req->min_people > $req->max_people) {
-            $response['message'] = 'Min People is greater than Max people';
-            $response['status'] = '0';
-        }
-        if (empty($req->max_people)) {
-            $response['message'] = 'Max People is required';
-            $response['status'] = '0';
+            $response['message'] = 'Min people is greater than max people count';
+            $response['status'] = 0;
         }
         if (empty($req->min_people)) {
-            $response['message'] = 'Min People is required';
-            $response['status'] = '0';
+            $response['message'] = 'Min people is required';
+            $response['status'] = 0;
         }
-        if (empty($req->email)) {
-            $response['message'] = 'Ferry Email  is required';
-            $response['status'] = '0';
-        }
-        if (empty($req->name)) {
-            $response['message'] = 'Ferry name is required';
-            $response['status'] = '0';
+        if (empty($req->max_people)) {
+            $response['message'] = 'Max people is required';
+            $response['status'] = 0;
         }
 
-        if ($this->Ferry_model->mail_exists($req->email)) {
+        if (empty($req->email)) {
+            $response['message'] = 'Ferry email  is required';
+            $response['status'] = 0;
+        } else {
+            if (!preg_match(EMAIL_PATTERN, $req->email)) {
+                $response['message'] = 'Ferry email is invalid';
+                $response['status'] = 0;
+            }
+        }
+
+        if (empty($req->name)) {
+            $response['message'] = 'Ferry name is required';
+            $response['status'] = 0;
+        }
+
+        if ($this->Ferry_model->mail_exists($req->email) && !$update) {
             $response['message'] = 'Ferry email exists';
-            $response['status'] = '0';
+            $response['status'] = 0;
         }
 
         return $response;

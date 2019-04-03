@@ -137,3 +137,7 @@ defined('ORDER_HISTORY_PERM')     OR define('ORDER_HISTORY_PERM',    array('8','
 defined('CUSTOMER_LIST_PERM')     OR define('CUSTOMER_LIST_PERM',    array('9','Customer List'));
 defined('CHECK_PRICE_REPORTS')    OR define('CHECK_PRICE_REPORTS',   array('10','Price Check Reports'));
 defined('STATISTIC')              OR define('STATISTIC',             array('11','Order Statistic'));
+
+defined('EMAIL_PATTERN') OR define('EMAIL_PATTERN','/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/');
+defined('LATITUDE_PATTERN') OR define('LATITUDE_PATTERN','/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/');
+defined('LONGITUDE_PATTERN') OR define('LONGITUDE_PATTERN','/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/');
