@@ -122,11 +122,22 @@ Class Tours extends CI_Controller
         if (empty($req['lng'])) {
             $response['message'] = 'Tour longitude is required';
             $response['status'] = '0';
+        } else {
+            if (!preg_match(LONGITUDE_PATTERN, $req['lng'])) {
+                $response['message'] = 'Tour longitude is invalid';
+                $response['status'] = 0;
+            }
         }
+
 
         if (empty($req['lat'])) {
             $response['message'] = 'Tour latitude is required';
             $response['status'] = '0';
+        } else {
+            if (!preg_match(LATITUDE_PATTERN, $req['lat'])) {
+                $response['message'] = 'Tour latitude is invalid';
+                $response['status'] = 0;
+            }
         }
 
 
