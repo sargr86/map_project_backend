@@ -109,8 +109,8 @@ Class Ferry extends CI_Controller
                 $response['status'] = 0;
             }
         }
-        if ($req->min_people > $req->max_people) {
-            $response['message'] = 'Min people is greater than max people count';
+        if ($req->min_people >= $req->max_people) {
+            $response['message'] = 'Max people must be greater than min people count';
             $response['status'] = 0;
         }
         if (empty($req->min_people)) {
