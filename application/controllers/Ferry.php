@@ -87,7 +87,7 @@ Class Ferry extends CI_Controller
         }
 
         if (empty($req->phone)) {
-            $response['message'] = 'Phone is required';
+            $response['message'] = 'Phone number is required';
             $response['status'] = 0;
         }
 
@@ -122,25 +122,29 @@ Class Ferry extends CI_Controller
             $response['status'] = 0;
         }
 
-        if (empty($req->email)) {
-            $response['message'] = 'Ferry email  is required';
-            $response['status'] = 0;
-        } else {
-            if (!preg_match(EMAIL_PATTERN, $req->email)) {
-                $response['message'] = 'Ferry email is invalid';
+        if(!$update){
+            if (empty($req->email)) {
+                $response['message'] = 'Ferry email  is required';
+                $response['status'] = 0;
+            } else {
+                if (!preg_match(EMAIL_PATTERN, $req->email)) {
+                    $response['message'] = 'Ferry email is invalid';
+                    $response['status'] = 0;
+                }
+            }
+
+            if ($this->Ferry_model->mail_exists($req->email)) {
+                $response['message'] = 'Ferry email exists';
                 $response['status'] = 0;
             }
         }
+
 
         if (empty($req->name)) {
             $response['message'] = 'Ferry name is required';
             $response['status'] = 0;
         }
 
-        if ($this->Ferry_model->mail_exists($req->email) && !$update) {
-            $response['message'] = 'Ferry email exists';
-            $response['status'] = 0;
-        }
 
         return $response;
     }
