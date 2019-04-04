@@ -39,9 +39,11 @@ Class Partners extends CI_Controller
             if (!$result) {
                 $res['message'] = 'Data not saved please try again.';
                 $res['status'] = '0';
-            }
+                show_error_json($res['message']);
+            } else {
 
-            echo json_encode($res);
+                echo json_encode($res);
+            }
         }
 
 
@@ -70,22 +72,31 @@ Class Partners extends CI_Controller
             $response['status'] = 0;
         }
 
-        if (empty($req->pass) && !$update) {
-            $response['message'] = 'Partner password is required';
-            $response['status'] = 0;
-        }
+        if (!$update) {
 
-        if (empty($req->email)) {
-            $response['message'] = 'Partner email is required';
-            $response['status'] = 0;
-        }
-
-        else {
-            if (!preg_match(EMAIL_PATTERN,$req->email)){
-                $response['message'] = 'Partner email is invalid';
+            if (empty($req->pass)) {
+                $response['message'] = 'Partner password is required';
                 $response['status'] = 0;
             }
         }
+
+        if (!$update) {
+            if (empty($req->email)) {
+                $response['message'] = 'Partner email  is required';
+                $response['status'] = 0;
+            } else {
+                if (!preg_match(EMAIL_PATTERN, $req->email)) {
+                    $response['message'] = 'Partner email is invalid';
+                    $response['status'] = 0;
+                }
+            }
+
+            if ($this->Partners_model->mail_exists($req->email)) {
+                $response['message'] = 'Partner email exists';
+                $response['status'] = 0;
+            }
+        }
+
 
         if (empty($req->last_name)) {
             $response['message'] = 'Partner last name is required';
@@ -95,12 +106,6 @@ Class Partners extends CI_Controller
             $response['message'] = 'Partner first name is required';
             $response['status'] = 0;
         }
-
-        if ($this->Partners_model->mail_exists($req->email) && !$update) {
-            $response['message'] = 'Partner email exists';
-            $response['status'] = 0;
-        }
-
 
         return $response;
     }
@@ -114,8 +119,8 @@ Class Partners extends CI_Controller
         $res = $this->validatePartner($req, true);
 
         if ($res['status'] != '0') {
-            $password = $this->encrypt_pass($req->pass);
-            $req->password = $password;
+//            $password = $this->encrypt_pass($req->pass);
+//            $req->password = $password;
             unset($req->pass);
 
             $result = $this->Partners_model->update_partner_info($req);
