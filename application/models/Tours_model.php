@@ -74,7 +74,7 @@ class Tours_model extends CI_Model
             return false;
         }
 
-        $this->db->where('tour_name', $data['name']);
+        $this->db->where('id', $data['id']);
         $result = $this->db->get('tours_type')->result_array();
         return $result;
     }
