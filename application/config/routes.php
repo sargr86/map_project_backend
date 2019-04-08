@@ -69,6 +69,7 @@ $route['addTourType'] = 'admin/Tours/add_tour_type';
 $route['allTourType'] = 'admin/Tours/get_tour_type';
 $route['getOneTourType'] = 'admin/Tours/get_one_tour_type';
 $route['updateTourType'] = 'admin/Tours/update_tour_type';
+$route['removeTourType'] = 'admin/Tours/remove_tour_type';
 
 $route['insert_ferry'] = 'Ferry/insert_ferry';
 $route['all_ferry'] = 'Ferry/get_all_ferry';

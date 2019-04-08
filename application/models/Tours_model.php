@@ -129,12 +129,21 @@ class Tours_model extends CI_Model
         $id = $data->id;
         unset($data->id);
         unset($data->mixinf);
-        $data->tour_name = $data->name;
         unset($data->name);
 
         $this->db->set($data);
         $this->db->where('id', $id);
 
         return $this->db->update('tours_type');
+    }
+
+    function remove_tour_type($data)
+    {
+        if (empty($data)) {
+            return false;
+        }
+
+        $this->db->where('id', $data->id);
+        return $this->db->delete('tours_type');
     }
 }

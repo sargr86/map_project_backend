@@ -166,30 +166,30 @@ Class Tours extends CI_Controller
             echo json_encode($response);
             return false;
         }
-
-        $mixinf = $this->session->userdata('id') . $this->session->userdata('name') . $this->input->ip_address();
-        $admin_mixinf = $this->encrypt_admin_pass($mixinf);
+//
+//        $mixinf = $this->session->userdata('id') . $this->session->userdata('name') . $this->input->ip_address();
+//        $admin_mixinf = $this->encrypt_admin_pass($mixinf);
 
         $request_body = file_get_contents('php://input');
 
         $req = json_decode($request_body);
 
-        if (empty($req->mixinf != $admin_mixinf)) {
-            $response['message'] = 'Error!';
-            $response['status'] = '0';
-            echo json_encode($response);
-            return false;
-        }
+//        if (empty($req->mixinf != $admin_mixinf)) {
+//            $response['message'] = 'Error!';
+//            $response['status'] = '0';
+//            echo json_encode($response);
+//            return false;
+//        }
 
-        if (empty($req->name)) {
+        if (empty($req->tour_name)) {
             $response['message'] = 'Tour type name is required';
             $response['status'] = '0';
-            echo json_encode($response);
-            return false;
+
+            show_error_json($response['message']);
         }
 
         $insert_data = [
-            'tour_name' => $req->name
+            'tour_name' => $req->tour_name
         ];
 
         $result = $this->Tours_model->insert_tours_type($insert_data);
@@ -309,6 +309,21 @@ Class Tours extends CI_Controller
 
         $result = $this->Tours_model->update_tour_type($req);
 
+        echo json_encode($result);
+    }
+
+    function remove_tour_type(){
+        $request_body = file_get_contents('php://input');
+
+        $req = json_decode($request_body);
+
+        $result = $this->Tours_model->remove_tour_type($req);
+        if (!$result) {
+            $response['message'] = 'Data not removed please try again.';
+            $response['status'] = '0';
+        } else {
+            $result = $this->Tours_model->get_tours_type();
+        }
         echo json_encode($result);
     }
 }
